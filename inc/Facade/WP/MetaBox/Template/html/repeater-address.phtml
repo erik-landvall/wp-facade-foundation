@@ -1,0 +1,121 @@
+<?php require dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '_noncename.phtml'; ?>
+
+<?php $description = esc_html( $this->description ); ?>
+<?php $values      = $this->getValue( $this->id ); ?>
+
+<?php if( !is_array( $values ) ) $values   = []; ?>
+<?php if( count( $values ) < 1 ) $values[] = [ '', '' ]; ?>
+
+<div id="repeater-<?= $this->id ?>">
+  <table style="margin-top:10px;width:100%;" class="repeater-content-wrapper-collection">
+    <?php if( $description <> '' ) : ?>
+      <tr>
+        <td colspan="2">
+          <p style="margin: 0 0 7px 0;">
+            <?= $description; ?>
+          </p>
+        </td>
+      </tr>
+    <?php endif;?>
+
+    <?php $i = 0; foreach( $values as $value ) : ?>
+      <tr class="repeater-content-wrapper">
+        <td style="width:100%;">
+          <table style="width:100%;">
+            <tr>
+              <td colspan="3">
+                <div style="margin-right:5px;margin-bottom:10px;">
+                  <input placeholder="Map iframe" type="text" name="<?= $this->id ?>[<?= $i ?>][0]" value="<?= esc_attr($value[0]) ?>" class="widefat" />
+                </div>
+              </td>
+            </tr>
+            
+            <tr>
+              <td>
+                <div style="margin-right:5px;margin-bottom:10px;">
+                  <input placeholder="Name" type="text" name="<?= $this->id ?>[<?= $i ?>][1]" value="<?= esc_attr($value[1]) ?>" class="widefat" />
+                </div>
+              </td>
+              
+              <td colspan="2">
+                <div style="margin-left:5px;margin-right:5px;margin-bottom:10px;">
+                  <input placeholder="Street" type="text" name="<?= $this->id ?>[<?= $i ?>][2]" value="<?= esc_attr($value[2]) ?>" class="widefat" />
+                </div>
+              </td>
+            </tr>
+            
+            <tr>
+              <td>
+                <div style="margin-right:5px;margin-bottom:10px;">
+                  <input placeholder="zip" type="text" name="<?= $this->id ?>[<?= $i ?>][3]" value="<?= esc_attr($value[3]) ?>" class="widefat" />
+                </div>
+              </td>
+              
+              <td>
+                <div style="margin-left:5px;margin-right:5px;margin-bottom:10px;">
+                  <input placeholder="city" type="text" name="<?= $this->id ?>[<?= $i ?>][4]" value="<?= esc_attr($value[4]) ?>" class="widefat" />
+                </div>
+              </td>
+              
+              <td>
+                <div style="margin-left:5px;margin-right:5px;margin-bottom:10px;">
+                  <input placeholder="phone" type="text" name="<?= $this->id ?>[<?= $i ?>][5]" value="<?= esc_attr($value[5]) ?>" class="widefat" />
+                </div>
+              </td>
+            </tr>
+          </table>
+          
+          <hr style="margin:15px 9px 16px 4px;width: auto; border-bottom:1px dotted #333;">
+        </td>
+        
+        <td style="width:1px;">
+          <input style="margin-bottom:10px;" class="repeater-button-remove button" type="button" value="–" />
+        </td>
+      </tr>
+    <?php $i++; endforeach;?>
+
+    <tr class="repeater-add-wrapper">
+      <td></td>
+      <td style="width:1px;">
+        <input style="float:right;" id="repeater-<?= $this->id ?>-button-add" type="button" class="button-primary" value="+" />
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script type="text/javascript">
+  ( function( $ )
+  {
+    $( '#repeater-<?= $this->id ?> .repeater-button-remove' )
+      .click(
+        function()
+        {
+          $( this ).parent().parent().remove();
+        });
+
+    var
+    i          = <?= $i ?>,
+    collection = $( '#repeater-<?= $this->id ?> .repeater-content-wrapper-collection' ),
+    addTr      = $( '.repeater-add-wrapper', collection ),
+    wrapper    = $( '.repeater-content-wrapper', collection ).first().clone( true );
+
+    $( 'input.widefat', wrapper ).removeAttr( 'value' );
+
+    $( '#repeater-<?= $this->id ?>-button-add' )
+      .click(
+        function()
+        {
+          i++;
+
+          var clone = wrapper.clone( true );
+
+          $( 'input.widefat', clone ).each(
+            function( n, input )
+            {
+              $( input ).attr( 'name', '<?= $this->id ?>[' + i + '][' + n + ']' );
+            });
+
+          addTr.before( clone );
+        });
+  })( jQuery );
+</script>

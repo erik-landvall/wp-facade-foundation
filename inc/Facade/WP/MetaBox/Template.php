@@ -5,23 +5,26 @@ abstract class Facade_WP_MetaBox_Template
 {
   public $id;
   public $description;
+  public $args;
   protected $_path;
 
-  public function __construct( $id, $description )
+  public function __construct( $id, $description, $args )
   {
     $this->id          = $id;
     $this->description = $description;
     $this->_path       = dirname( __FILE__ )
                        . DIRECTORY_SEPARATOR
                        . 'Template' ;
+    $this->args        = $args;
   }
 
   public function getHtml()
   {
     $filter    = new Facade_Filter_CamelToDashed();
     $ds        = DIRECTORY_SEPARATOR;
-    $exploaded = explode('_', get_class( $this ));
-    $template  = $filter->filter(array_pop($exploaded));
+    $class     = get_class( $this );
+    $name      = explode( '_', $class );
+    $template  = $filter->filter(array_pop($name));
 
     require $this->_path
       . $ds
@@ -34,5 +37,10 @@ abstract class Facade_WP_MetaBox_Template
   protected function getValue( $key )
   {
     return Facade_WP_MetaBox::get( $key );
+  }
+  
+  protected function getArgs()
+  {
+    return $this->args;
   }
 }

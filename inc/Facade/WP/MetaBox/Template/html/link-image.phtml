@@ -1,0 +1,83 @@
+<?php require dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '_noncename.phtml'; ?>
+
+<?php $description = esc_html( $this->description ); ?>
+
+<?php
+  $initArgs = $this->getArgs();
+  $posttype = (isset($initArgs['post_type']) ? $initArgs['post_type'] : 'page');
+  $value    = $this->getValue( $this->id );
+
+  $args = array(
+    'depth'                 => 0,
+    'child_of'              => 0,
+    'selected'              => $this->getValue($this->id)[0],
+    'echo'                  => 1,
+    'post_type'             => $posttype,
+    'name'                  => $this->id . '[0]',
+    'id'                    => $this->id . '[0]',
+    'show_option_none'      => null,
+    'show_option_no_change' => null,
+    'option_none_value'     => null,
+  );
+?>
+
+<div id="dubbel-image-<?= $this->id ?>">
+  <table style="margin-top:10px;width:100%;" class="content-wrapper-collection">
+    <?php if( $description <> '' ) : ?>
+      <tr>
+        <td colspan="5">
+          <p style="margin: 0 0 7px 0;">
+            <?= $description ?>
+          </p>
+        </td>
+      </tr>
+    <?php endif;?>
+
+    <tr class="content-wrapper">
+      <td>
+        <div style="margin-right:5px;margin-bottom:10px;">
+          <?php wp_dropdown_pages( $args ) ?>
+        </div>
+      </td>
+      
+      <td style="position: relative; width: 100%;">
+        <div style="margin-right:5px;margin-bottom:10px;">
+          <input placeholder="<?php _e('Image') ?>" class="upload-image url widefat image" type="text" value="<?= esc_attr($this->getValue($this->id)[1]) ?>" name="<?= $this->id ?>[1]" />
+        </div>
+      </td>
+
+      <td style="width:1px;">
+        <input style="margin-right:5px;margin-bottom:10px;" class="upload-image button" data-target="image" type="button" value="<?php _e('Select image') ?>" />
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script type="text/javascript">
+  ( function( $ )
+  {
+    $( '#dubbel-image-<?= $this->id ?> .upload-image.button' ).click(
+      function()
+      {
+        var
+        target = $('input.upload-image.url.' + $(this).data('target'), $(this).parent().parent()),
+        name   = target.attr('name'),
+        wste   = window.send_to_editor;
+
+        tb_show('', 'media-upload.php?type=image&TB_iframe=true');
+
+        window.send_to_editor = function(html)
+        {
+          if(name != null)
+          {
+            target.val($('img', html).attr('src'));
+            tb_remove();
+            name = null;
+          }
+          else
+            wste(html);
+        };
+        return false;
+      });
+  })( jQuery );
+</script>

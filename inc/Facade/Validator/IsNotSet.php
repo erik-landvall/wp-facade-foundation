@@ -1,6 +1,6 @@
 <?php
 
-class Facade_Validator_IsSet implements Facade_Validator_Interface
+class Facade_Validator_IsNotSet implements Facade_Validator_Interface
 {
   /**
    * @param array $data 
@@ -9,7 +9,7 @@ class Facade_Validator_IsSet implements Facade_Validator_Interface
   public function validate($data)
   {
     foreach ($data as $tmp)
-      if(is_null($tmp) || empty($tmp))
+      if(is_string($tmp) && strlen($tmp) > 0)
         return false;
     
     return true;

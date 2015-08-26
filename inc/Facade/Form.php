@@ -1,25 +1,22 @@
 <?php
 
-abstract class Facade_Form implements Facade_Form_Interface
+abstract class Facade_Form
 {
   protected
    /**
     * Validation rules
-    *
     * @var Array
     */
     $_rules = [],
 
    /**
     * What keys to filter
-    *
     * @var Array
     */
     $_filter = [],
 
    /**
     * Validation rules
-    *
     * @var Array
     */
     $_data = [];
@@ -40,7 +37,6 @@ abstract class Facade_Form implements Facade_Form_Interface
 
  /**
   * Composes the data.
-  *
   * @throws Facade_Form_Exception
   */
   protected function _composeData()
@@ -75,69 +71,74 @@ abstract class Facade_Form implements Facade_Form_Interface
 
  /**
   * Validates the data.
-  *
   * @throws Facade_Form_Exception
   */
   protected function _validateData()
   {
-    foreach( $this->_rules as $key => $rules )
-    {
-      if( !is_array( $rules ) )
-        $rules = [ $rules ];
-
-      foreach( $rules as $rule )
+    foreach($this->_rules as $onInvalidation => $rules)
+      foreach($rules as $rule => $fields)
       {
+        if(is_string($fields))
+          $fields = [$fields];
+
         try
         {
           $rule = new $rule();
 
-          if( !( $rule instanceof Facade_Validator_Interface ))
-            throw new Exception();
+          if(!($rule instanceof Facade_Validator_Interface))
+            throw new Exception;
         }
-        catch( Exception $exc )
+        catch(Exception $exc)
         {
           throw new Facade_Form_Exception(
             'Unrecognized validation rule: "' . $rule . '"' );
         }
 
-        $data = isset( $this->_data[ $key ] )
-              ? $this->_data[ $key ]
-              : null;
-
-        if( !$rule->validate( $data ))
-          throw new Facade_Form_Exception(
-            'Invalid data for: "' . $key . '", rule: "' . get_class ( $rule ) . '"' );
+        $data = array();
+        foreach ($fields as $field)
+          $data[] = isset($this->_data[$field])
+                  ? $this->_data[$field]
+                  : null;
+        
+        if(!$rule->validate($data))
+          $this->$onInvalidation();
       }
-    }
   }
 
   public static function mapper($handler)
   {
-    if(class_exists($handler))
+    if(!class_exists($handler, true))
+      return false;
+    
+    if(!in_array('Facade_Form', class_parents($handler, true)))
       return false;
 
     $form = new $handler();
 
-    try
-    {
-      $form->_composeData();
-      $form->_validateData();
-    }
-    catch( Facade_Form_Exception $e )
-    {
-      $form->onInvalidation( $e->getMessage() );
-    }
-
+    $form->_composeData();
+    $form->onComposedData();
+    $form->_validateData();
     $form->validated();
 
     return true;
   }
 
-  public function onInvalidation( $message = '' )
+  protected function onInvalidation( $message = '' )
   {
     if( $message !== '' )
       Facade_FlashMessage::addMessage( $message, 'error' );
 
     Facade_Request::reload();
   }
+  
+  /**
+   * This event is triggered after data been composed and filtered. but before 
+   * validation process has taken place
+   */
+  protected function onComposedData()
+  {
+    // Placeholder if you wanna hook in to this event.
+  }
+  
+  abstract protected function validated();
 }

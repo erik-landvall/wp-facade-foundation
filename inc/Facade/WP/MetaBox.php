@@ -9,10 +9,11 @@ class Facade_WP_MetaBox
     $pageTemplate,
     $metaTemplate,
     $context,
-    $priority;
+    $priority,
+    $args;
 
   protected function __construct($id, $title, $description, $type,
-    $metaTemplate, $pageTemplate, $context, $priority)
+    $metaTemplate, $pageTemplate, $context, $priority, $args)
   {
     $metaTemplate = implode(
       '',
@@ -22,8 +23,10 @@ class Facade_WP_MetaBox
         '-',
         $metaTemplate )));
 
+    $id = sanitize_title( $id );
+    
     $this->title        = $title;
-    $this->id           = sanitize_title( $id );
+    $this->id           = $id;
     $this->type         = $type;
     $this->description  = $description;
     $this->context      = $context;
@@ -31,18 +34,18 @@ class Facade_WP_MetaBox
     $this->priority     = $priority;
 
     if( class_exists( $metaTemplate ))
-      $this->metaTemplate = new $metaTemplate( $this->id, $description );
+      $this->metaTemplate = new $metaTemplate( $id, $description, $args );
 
     if( !( $this->metaTemplate instanceof Facade_WP_MetaBox_Template ))
     {
       $this->metaTemplate = 'Facade_WP_MetaBox_Template_' . $metaTemplate;
-      $this->metaTemplate = new $this->metaTemplate( $this->id, $description );
+      $this->metaTemplate = new $this->metaTemplate( $id, $description, $args );
     }
   }
 
   public static function add($id, $title, $description = '', $type = 'post',
     $metaTemplate = 'simple', $pageTemplate = 'any', $context = 'normal',
-    $priority = 'high')
+    $priority = 'high', $args = array())
   {
     $instance = new self(
       $id,
@@ -52,7 +55,8 @@ class Facade_WP_MetaBox
       $metaTemplate,
       $pageTemplate,
       $context,
-      $priority );
+      $priority,
+      $args);
 
     add_action(
       'add_meta_boxes',

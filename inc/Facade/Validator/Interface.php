@@ -3,8 +3,8 @@
 interface Facade_Validator_Interface
 {
   /**
-   * @param mix $data 
+   * @param array $data 
    * @return boolean 
    */
-  public function validate( $data );
+  public function validate($data);
 }

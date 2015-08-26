@@ -1,0 +1,58 @@
+#login h1
+{
+  display: none;
+}
+
+#login .button
+{
+  background: #333;
+  color: #fff;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  border-radius: 2px;
+  text-transform: uppercase;
+  font-weight: bold;
+  
+  -webkit-transition: background .4s;
+     -moz-transition: background .4s;
+       -o-transition: background .4s;
+          transition: background .4s;
+}
+
+#login .button:hover,
+#login .button:focus
+{
+  background: #666;
+  color: #fff;
+}
+
+#login input:focus
+{
+  border-color: #333;
+  
+  -webkit-box-shadow: 0 0 2px #444;
+          box-shadow: 0 0 2px #444;
+}
+
+#login input[type=checkbox]:checked:before
+{
+  color: #333;
+}
+
+#login #backtoblog a, 
+#login #nav a, 
+#login h1 a
+{
+  -webkit-transition: color .4s;
+     -moz-transition: color .4s;
+       -o-transition: color .4s;
+          transition: color .4s;
+}
+
+#login #backtoblog a:hover, 
+#login #nav a:hover, 
+#login h1 a:hover
+{
+  color: #666;
+}

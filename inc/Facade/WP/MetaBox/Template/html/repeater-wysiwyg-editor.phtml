@@ -1,0 +1,112 @@
+<?php require dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '_noncename.phtml'; ?>
+
+<?php $description = esc_html( $this->description ); ?>
+<?php $values      = $this->getValue( $this->id ); ?>
+
+<?php wp_tiny_mce() ?>
+
+<?php if( !is_array( $values ) ) $values   = array(); ?>
+<?php if( count( $values ) < 1 ) $values[] = ''; ?>
+
+<div id="repeater-<?php echo $this->id ?>">
+  <table style="margin-top:10px;width:100%;" class="repeater-content-wrapper-collection">
+    <?php if( $description <> '' ) : ?>
+      <tr>
+        <td colspan="2">
+          <p style="margin: 0 0 7px 0;">
+            <?php echo $description; ?>
+          </p>
+        </td>
+      </tr>
+    <?php endif ?>
+      
+    <?php $i = 0; foreach( $values as $value ) : ?>
+      <tr class="repeater-content-wrapper">
+        <td>
+          <div style="margin-right:5px;margin-bottom:10px;border: 1px solid #eee">
+            <textarea rows="20" type="text" id="textarea_<?php echo $this->id; ?>_<?php echo $i++; ?>" name="<?php echo $this->id ?>[]" class="widefat" /><?php echo apply_filters('the_content', $value) ?></textarea>
+          </div>
+        </td>
+
+        <td>
+          <input style="margin-top:4px;" class="repeater-button-remove button" type="button" value="–" />
+        </td>
+      </tr>
+    <?php endforeach;?>
+      
+    <tr class="repeater-add-wrapper">
+      <td></td>
+      <td style="width:1px;">
+        <input style="float:right;" id="repeater-<?php echo $this->id ?>-button-add" type="button" class="button-primary" value="+" />
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script type="text/javascript">
+  (function($)
+  {
+    // remove button
+    $('#repeater-<?= $this->id ?> .repeater-button-remove')
+      .click(
+        function()
+        {
+          $(this).parent().parent().remove();
+        });
+        
+    // clone button / add button
+    $('#repeater-<?= $this->id ?>-button-add')
+      .click(
+        function()
+        {
+          var 
+            clone = wrapper.clone(true),
+            id    = 'textarea_<?= $this->id; ?>_' + idSuffix++;
+    
+          $('textarea', clone).attr('id', id);
+          addTr.before(clone);
+          
+          tinyMCE.init(
+          {
+            selector: '#'+id,
+            statusbar: false,
+            menubar: false,
+            setup: function (editor) 
+            {
+              editor.on('change', function () 
+              {
+                $('#' + editor.id).html(editor.getContent());
+              });
+            }
+          });
+        });
+        
+    // meta
+    var
+    idSuffix   = <?= $i ?>,
+    collection = $('#repeater-<?= $this->id ?> .repeater-content-wrapper-collection'),
+    addTr      = $('.repeater-add-wrapper', collection),
+    wrapper    = $('.repeater-content-wrapper', collection).first().clone(true);
+
+    $('textarea', wrapper ).html('');
+        
+    // init tiny mce
+    $(function()
+    {
+      tinyMCE.init(
+      {
+        selector: 'textarea',
+        statusbar: false,
+        menubar: false,
+        setup: function (editor) 
+        {
+          editor.on('change', function () 
+          {
+            $('#' + editor.id).html(editor.getContent());
+          });
+        }
+      });
+    });
+    
+  })(jQuery);
+</script>

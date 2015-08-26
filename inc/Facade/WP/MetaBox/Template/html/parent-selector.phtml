@@ -1,0 +1,22 @@
+<?php 
+
+require dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '_noncename.phtml';
+
+$initArgs = $this->getArgs();
+$posttype = (isset($initArgs['post_type']) ? $initArgs['post_type'] : '');
+$value    = $this->getValue( $this->id );
+
+$args = array(
+  'depth'                 => 0,
+  'child_of'              => 0,
+  'selected'              => $value,
+  'echo'                  => 1,
+  'post_type'             => $posttype,
+  'name'                  => $this->id,
+  'id'                    => $this->id,
+  'show_option_none'      => null,
+  'show_option_no_change' => null,
+  'option_none_value'     => null,
+);
+
+wp_dropdown_pages( $args );

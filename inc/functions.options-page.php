@@ -1,12 +1,12 @@
 <?php
 
-function west_theme_options_global_segment()
+function facade_theme_options_global_segment()
 {
   // Validate access
   if(!current_user_can('manage_options'))
     wp_die(__(
-      'Du har inte tillräcklig behörighet för att komma åt sidan.',
-      'west'));
+      'You do not have sufficient privileges to access this page.',
+      'facade'));
 
   // Save post data
   if($_SERVER['REQUEST_METHOD'] === 'POST')
@@ -14,7 +14,7 @@ function west_theme_options_global_segment()
     foreach ($_POST as $key => $value)
       update_option('facade_' . $key, $value);
 
-    echo '<div id="message" class="updated">' . __('Inehåll sparat') . '</div>';
+    echo '<div id="message" class="updated" style="padding:15px">' . __('Content saved', 'facade') . '</div>';
   }
 
   // Render template
@@ -23,13 +23,13 @@ function west_theme_options_global_segment()
   Timber::render('admin/global-segment.twig', $context);
 }
 
-function west_theme_options()
+function facade_theme_options()
 {
   add_menu_page(
-    __('Globala segment', 'west'),
-    'west.',
+    __('Global segments', 'facade'),
+    'Options',
     'manage_options',
-    'west_global-segment',
-    'west_theme_options_global_segment');
+    'facade_global-segment',
+    'facade_theme_options_global_segment');
 }
-add_action('admin_menu', 'west_theme_options');
+add_action('admin_menu', 'facade_theme_options');

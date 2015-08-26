@@ -59,7 +59,7 @@ class Facade_WP_Widget_CPT extends WP_Widget
     $instance = wp_parse_args((array) $instance, ['title' => '', $this->cpt => 0]);
     echo '<input class="widefat" id="' . $this->get_field_id('title') . '" name="' . $this->get_field_name('title') . '" type="hidden" value="' . $instance['title'] . '" />'
         .'<p>'
-        .'<label for="' . $this->get_field_id($this->cpt) . '">' . __('Välj en post:');
+        .'<label for="' . $this->get_field_id($this->cpt) . '">' . __('Select a post:', 'facade');
 
     $posts = get_posts('post_type=' . $this->cpt . '&post_status=publish&numberposts=-1');
     if(count($posts) > 0)
@@ -70,7 +70,7 @@ class Facade_WP_Widget_CPT extends WP_Widget
       echo '</select>';
     }
     else
-      echo '<em>'. __('Inga poster funna') .'</em>';
+      echo '<em>'. __('No records found', 'facade') .'</em>';
 
     echo '</label>';
   }
