@@ -104,3 +104,28 @@ function count_posts_by_language(
   
   return $wpdb->get_var($query);
 }
+
+/**
+ * Used to debug sql queries. This requires a constant setting of 
+ * `define('SAVEQUERIES', true);` to be set in wp-config.php
+ * 
+ * Warning, slow when activated
+ */
+function debug_sql_queries()
+{
+  if(current_user_can('administrator'))
+  {
+    global $wpdb;
+    $totalTime = 0;
+    
+    foreach ($wpdb->queries as $query)
+    {
+      echo 'Query: <br><strong>' . nl2br(trim($query[0])) . '</strong><br><br>';
+      echo 'Time to execute: <strong>' . $query[1] . '</strong><hr>';
+      $totalTime += $query[1];
+    }
+    
+    echo 'Queries count: <strong>' . count($wpdb->queries) . '</strong><br>';
+    echo 'Total time: <strong>' . $totalTime . '</strong><br>';
+  }
+}
