@@ -70,7 +70,7 @@
         });
 
     var
-    i          = <?= $i ?>,
+    i          = <?= $i - 1 ?>,
     collection = $( '#repeater-<?= $this->id ?> .repeater-content-wrapper-collection' ),
     addTr      = $( '.repeater-add-wrapper', collection ),
     wrapper    = $( '.repeater-content-wrapper', collection ).first().clone( true );
@@ -85,10 +85,10 @@
 
           var clone = wrapper.clone( true );
 
-          $( 'input[name]', clone ).each(
+          $('[name]', clone ).each(
             function( n, input )
             {
-              $( input ).attr( 'name', '<?= $this->id ?>[' + i + '][' + n + ']' );
+              $(input).attr('name', '<?= $this->id ?>[' + i + '][' + n + ']');
             });
 
           addTr.before( clone );

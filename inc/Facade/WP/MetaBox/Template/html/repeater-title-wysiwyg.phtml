@@ -13,7 +13,7 @@
       <tr>
         <td colspan="2">
           <p style="margin: 0 0 7px 0;">
-            <?php echo $description; ?>
+            <?= $description ?>
           </p>
         </td>
       </tr>
@@ -30,22 +30,10 @@
                 </div>
               </td>
             </tr>
-            
-            <tr class="content-wrapper">
-              <td style="position: relative;">
-                <div style="margin-right:5px;margin-bottom:10px;">
-                  <input placeholder="<?php _e('Image url', 'facade') ?>" class="upload-image url widefat" type="text" value="<?= esc_attr($value[1]) ?>" name="<?= $this->id ?>[<?= $i ?>][1]" />
-                </div>
-              </td>
-
-              <td style="width:1px;">
-                <input style="margin-right:5px;margin-bottom:10px;" class="upload-image button" type="button" value="<?php _e( 'Select image', 'facade' ) ?>" />
-              </td>
-            </tr>
           </table>
           
           <div style="margin-right:5px;margin-bottom:10px;border: 1px solid #eee">
-            <textarea rows="20" type="text" id="textarea_<?= $this->id; ?>_<?= $i ?>" name="<?= $this->id ?>[<?= $i ?>][2]" class="widefat custom-tiny-mce" /><?= apply_filters('the_content', $value[2]) ?></textarea>
+            <textarea rows="20" type="text" id="textarea_<?= $this->id ?>_<?= $i ?>" name="<?= $this->id ?>[<?= $i ?>][1]" class="widefat custom-tiny-mce" /><?= apply_filters('the_content', $value[1]) ?></textarea>
           </div>
           
           <hr style="margin: 20px 5px 0 0">
@@ -55,7 +43,7 @@
           <input class="repeater-button-remove button" type="button" value="–" />
         </td>
       </tr>
-    <?php $i++; endforeach;?>
+    <?php $i++; endforeach ?>
       
     <tr class="repeater-add-wrapper">
       <td></td>
@@ -126,11 +114,10 @@
     {
       var 
         clone = wrapper.clone(true),
-        id    = 'textarea_<?= $this->id; ?>_' + (++idSuffix);
+        id    = 'textarea_<?= $this->id ?>_' + (++idSuffix);
 
       $('input.alt', clone).attr('name', '<?= $this->id ?>[' + idSuffix + '][0]');
-      $('input.url', clone).attr('name', '<?= $this->id ?>[' + idSuffix + '][1]');
-      $('textarea',  clone).attr('name', '<?= $this->id ?>[' + idSuffix + '][2]');
+      $('textarea',  clone).attr('name', '<?= $this->id ?>[' + idSuffix + '][1]');
       $('textarea',  clone).attr('id', id);
       
       addTr.before(clone);
@@ -145,7 +132,6 @@
     wrapper    = $('.repeater-content-wrapper', collection).first().clone(true);
 
     $('input.alt', wrapper).val('');
-    $('input.url', wrapper).val('');
     $('textarea',  wrapper).html('');
         
     // init tiny mce
