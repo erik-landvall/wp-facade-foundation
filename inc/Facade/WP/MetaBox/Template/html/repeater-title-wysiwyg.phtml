@@ -1,0 +1,144 @@
+<?php require dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '_noncename.phtml'; ?>
+<?php $description = esc_html( $this->description ); ?>
+<?php $values      = $this->getValue( $this->id ); ?>
+
+<?php wp_tiny_mce() ?>
+
+<?php if( !is_array( $values ) ) $values   = array(); ?>
+<?php if( count( $values ) < 1 ) $values[] = ''; ?>
+
+<div id="repeater-<?php echo $this->id ?>">
+  <table style="margin-top:10px;width:100%;" class="repeater-content-wrapper-collection">
+    <?php if( $description <> '' ) : ?>
+      <tr>
+        <td colspan="2">
+          <p style="margin: 0 0 7px 0;">
+            <?= $description ?>
+          </p>
+        </td>
+      </tr>
+    <?php endif ?>
+      
+    <?php $i = 0; foreach( $values as $value ) : ?>
+      <tr class="repeater-content-wrapper">
+        <td>
+          <table style="margin-top:10px;width:100%;" class="content-wrapper-collection">
+            <tr>
+              <td colspan="2">
+                <div style="margin-right:5px;margin-bottom:10px;">
+                  <input placeholder="<?php _e('Headline', 'facade') ?>" class="alt widefat" type="text" value="<?= esc_attr($value[0]) ?>" name="<?= $this->id ?>[<?= $i ?>][0]" />
+                </div>
+              </td>
+            </tr>
+          </table>
+          
+          <div style="margin-right:5px;margin-bottom:10px;border: 1px solid #eee">
+            <textarea rows="20" type="text" id="textarea_<?= $this->id ?>_<?= $i ?>" name="<?= $this->id ?>[<?= $i ?>][1]" class="widefat custom-tiny-mce" /><?= apply_filters('the_content', $value[1]) ?></textarea>
+          </div>
+          
+          <hr style="margin: 20px 5px 0 0">
+        </td>
+
+        <td>
+          <input class="repeater-button-remove button" type="button" value="–" />
+        </td>
+      </tr>
+    <?php $i++; endforeach ?>
+      
+    <tr class="repeater-add-wrapper">
+      <td></td>
+      <td style="width:1px;">
+        <input style="float:right;" id="repeater-<?php echo $this->id ?>-button-add" type="button" class="button-primary" value="+" />
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script type="text/javascript">
+  (function($)
+  {
+    // tiny mce initilizer
+    function tinyMceIni(selector)
+    {
+      tinyMCE.init(
+      {
+        selector: selector,
+        statusbar: false,
+        menubar: false,
+        toolbar: 'undo redo | formatselect | bold italic | bullist numlist | link unlink | removeformat | code',
+        setup: function (editor) 
+        {
+          editor.on('change', function () 
+          {
+            $('#' + editor.id).html(editor.getContent());
+          });
+        }
+      });
+    }
+    
+    // upload button listener
+    $( '#repeater-<?= $this->id ?> .upload-image.button' ).click(
+      function()
+      {
+        var
+        target = $( 'input.upload-image.url', $( this ).parent().parent() ),
+        name   = target.attr( 'name' ),
+        wste   = window.send_to_editor;
+
+        tb_show( '', 'media-upload.php?type=image&TB_iframe=true' );
+
+        window.send_to_editor = function( html )
+        {
+          if( name != null )
+          {
+            target.val( $( 'img', html ).attr( 'src' ) );
+            tb_remove();
+            name = null;
+          }
+          else
+            wste( html );
+        };
+        return false;
+      });
+    
+    // remove button
+    $('#repeater-<?= $this->id ?> .repeater-button-remove')
+      .click(
+        function()
+        {
+          $(this).parent().parent().remove();
+        });
+        
+    // clone button / add button
+    $('#repeater-<?= $this->id ?>-button-add').click(function()
+    {
+      var 
+        clone = wrapper.clone(true),
+        id    = 'textarea_<?= $this->id ?>_' + (++idSuffix);
+
+      $('input.alt', clone).attr('name', '<?= $this->id ?>[' + idSuffix + '][0]');
+      $('textarea',  clone).attr('name', '<?= $this->id ?>[' + idSuffix + '][1]');
+      $('textarea',  clone).attr('id', id);
+      
+      addTr.before(clone);
+      tinyMceIni('#'+id);
+    });
+        
+    // meta
+    var
+    idSuffix   = <?= $i ?>,
+    collection = $('#repeater-<?= $this->id ?> .repeater-content-wrapper-collection'),
+    addTr      = $('.repeater-add-wrapper', collection),
+    wrapper    = $('.repeater-content-wrapper', collection).first().clone(true);
+
+    $('input.alt', wrapper).val('');
+    $('textarea',  wrapper).html('');
+        
+    // init tiny mce
+    $(function()
+    {
+      tinyMceIni('textarea.custom-tiny-mce');
+    });
+    
+  })(jQuery);
+</script>
