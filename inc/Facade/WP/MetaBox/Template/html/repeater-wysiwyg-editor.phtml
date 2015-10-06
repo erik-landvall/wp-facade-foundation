@@ -24,7 +24,7 @@
       <tr class="repeater-content-wrapper">
         <td>
           <div style="margin-right:5px;margin-bottom:10px;border: 1px solid #eee">
-            <textarea rows="20" type="text" id="textarea_<?php echo $this->id; ?>_<?php echo $i++; ?>" name="<?php echo $this->id ?>[]" class="widefat" /><?php echo apply_filters('the_content', $value) ?></textarea>
+            <textarea rows="20" type="text" id="textarea_<?php echo $this->id; ?>_<?php echo $i++; ?>" name="<?php echo $this->id ?>[]" class="widefat custom-tiny-mce" /><?php echo apply_filters('the_content', $value) ?></textarea>
           </div>
         </td>
 
@@ -95,7 +95,7 @@
     {
       tinyMCE.init(
       {
-        selector: 'textarea',
+        selector: 'textarea.custom-tiny-mce',
         statusbar: false,
         menubar: false,
         setup: function (editor) 

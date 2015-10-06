@@ -45,7 +45,7 @@
           </table>
           
           <div style="margin-right:5px;margin-bottom:10px;border: 1px solid #eee">
-            <textarea rows="20" type="text" id="textarea_<?= $this->id; ?>_<?= $i ?>" name="<?= $this->id ?>[<?= $i ?>][2]" class="widefat" /><?= apply_filters('the_content', $value[2]) ?></textarea>
+            <textarea rows="20" type="text" id="textarea_<?= $this->id; ?>_<?= $i ?>" name="<?= $this->id ?>[<?= $i ?>][2]" class="widefat custom-tiny-mce" /><?= apply_filters('the_content', $value[2]) ?></textarea>
           </div>
           
           <hr style="margin: 20px 5px 0 0">
@@ -151,7 +151,7 @@
     // init tiny mce
     $(function()
     {
-      tinyMceIni('textarea');
+      tinyMceIni('textarea.custom-tiny-mce');
     });
     
   })(jQuery);
