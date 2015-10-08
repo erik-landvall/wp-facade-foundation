@@ -16,7 +16,7 @@ abstract class Facade_Form
     $_filter = [],
 
    /**
-    * Validation rules
+    * Filtered data
     * @var Array
     */
     $_data = [];
@@ -126,7 +126,7 @@ abstract class Facade_Form
   protected function onInvalidation( $message = '' )
   {
     if( $message !== '' )
-      Facade_FlashMessage::addMessage( $message, 'error' );
+      Facade_FlashMessage::getInstance()->addMessage( $message, 'error' );
 
     Facade_Request::reload();
   }
@@ -137,7 +137,9 @@ abstract class Facade_Form
    */
   protected function onComposedData()
   {
-    // Placeholder if you wanna hook in to this event.
+    // Placeholder if you wanna hook in to this event. Can't be abstract 
+    // becouse it then makes a promise to be used in the child classes. This 
+    // hook was not constructed to be forced.
   }
   
   abstract protected function validated();
