@@ -42,6 +42,9 @@ abstract class Facade_Form
   protected function _composeData()
   {
     foreach( $_POST as $key => $value )
+    {
+      $this->_data[ $key ] = $value;
+      
       if( isset( $this->_filter[ $key ] ))
       {
         if( !is_array( $this->_filter[ $key ] ) )
@@ -62,11 +65,10 @@ abstract class Facade_Form
               'Unrecognized filter: "' . $rule . '"' );
           }
 
-          $this->_data[ $key ] = $filter->filter( $value );
+          $this->_data[ $key ] = $filter->filter( $this->_data[ $key ] );
         }
       }
-      else
-        $this->_data[ $key ] = $value;
+    }
   }
 
  /**
