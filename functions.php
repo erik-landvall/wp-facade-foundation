@@ -10,6 +10,9 @@ require_once $inc.'functions.bootstrap.php';
 // Meta
 require_once $inc.'functions.app-meta.php';
 
+// Router, post data, etc... 
+require_once $inc.'functions.router.php';
+
 // Menu
 require_once $inc.'functions.menu.php';
 

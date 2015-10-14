@@ -25,10 +25,6 @@ spl_autoload_register(function($class_name)
     include_once $file;
 });
 
-// Handles certain post data
-if(isset($_POST['ns']))
-  Facade_Form::mapper($_POST['ns']);
-
 // Security
 define('DISALLOW_FILE_EDIT', true);
 
