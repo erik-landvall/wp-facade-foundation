@@ -10,11 +10,11 @@ require_once $inc.'functions.bootstrap.php';
 // Meta
 require_once $inc.'functions.app-meta.php';
 
-// Router, post data, etc... 
-require_once $inc.'functions.router.php';
-
 // Menu
 require_once $inc.'functions.menu.php';
+
+// Options
+require_once $inc.'functions.options-page.php';
 
 // Timber
 require_once $inc.'functions.timber.php';
@@ -22,20 +22,20 @@ require_once $inc.'functions.timber.php';
 // Custome post types
 require_once $inc.'functions.cpt.php';
 
+// Meta boxes
+require_once $inc.'functions.meta-boxes.php';
+
 // Javascript
 require_once $inc.'functions.java-scripts.php';
 
 // CSS
 require_once $inc.'functions.style-sheets.php';
 
-// Meta boxes
-require_once $inc.'functions.meta-boxes.php';
-
-// Options
-require_once $inc.'functions.options-page.php';
-
 // Widgets
 require_once $inc.'functions.widget.php';
 
 // Editor
 require_once $inc.'functions.editor.php';
+
+// Router, post data, etc... 
+require_once $inc.'functions.router.php';
