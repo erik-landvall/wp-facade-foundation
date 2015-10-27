@@ -11,18 +11,31 @@ require_once get_template_directory()
 spl_autoload_register(function($class_name)
 {
   $file = get_template_directory()
-    .DS
-    .'inc'
-    .DS
-    .implode(
-      DS,
-      explode(
-      '_',
-      $class_name))
-    .'.php';
+    . DS
+    . 'inc'
+    . DS
+    . str_replace('_', DS, $class_name)
+    . '.php';
 
   if(is_file($file))
-    include_once $file;
+  {
+    require $file;
+  }
+});
+
+spl_autoload_register(function($class_name)
+{
+  $file = get_template_directory()
+    . DS
+    . 'inc'
+    . DS
+    . str_replace('\\', DS, $class_name)
+    . '.php';
+
+  if(is_file($file))
+  {
+    require $file;
+  }
 });
 
 // Handles certain post data
