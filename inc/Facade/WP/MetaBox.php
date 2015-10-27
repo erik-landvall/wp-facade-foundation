@@ -129,6 +129,11 @@ class Facade_WP_MetaBox
     foreach( $this->metaTemplate->getKeys() as $key )
     {
       $value = $_POST[ $key ];
+      
+      if( is_array( $value ))
+      {
+        $value = array_filter_recursive( $value );
+      }
 
       // If the value is defined as an array then serialize it
       if( empty( $value ))

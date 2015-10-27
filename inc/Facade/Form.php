@@ -16,7 +16,7 @@ abstract class Facade_Form
     $_filter = [],
 
    /**
-    * Validation rules
+    * Filtered data
     * @var Array
     */
     $_data = [];
@@ -42,6 +42,9 @@ abstract class Facade_Form
   protected function _composeData()
   {
     foreach( $_POST as $key => $value )
+    {
+      $this->_data[ $key ] = $value;
+      
       if( isset( $this->_filter[ $key ] ))
       {
         if( !is_array( $this->_filter[ $key ] ) )
@@ -62,11 +65,10 @@ abstract class Facade_Form
               'Unrecognized filter: "' . $rule . '"' );
           }
 
-          $this->_data[ $key ] = $filter->filter( $value );
+          $this->_data[ $key ] = $filter->filter( $this->_data[ $key ] );
         }
       }
-      else
-        $this->_data[ $key ] = $value;
+    }
   }
 
  /**
@@ -126,7 +128,7 @@ abstract class Facade_Form
   protected function onInvalidation( $message = '' )
   {
     if( $message !== '' )
-      Facade_FlashMessage::addMessage( $message, 'error' );
+      Facade_FlashMessage::getInstance()->addMessage( $message, 'error' );
 
     Facade_Request::reload();
   }
@@ -137,7 +139,9 @@ abstract class Facade_Form
    */
   protected function onComposedData()
   {
-    // Placeholder if you wanna hook in to this event.
+    // Placeholder if you wanna hook in to this event. Can't be abstract 
+    // becouse it then makes a promise to be used in the child classes. This 
+    // hook was not constructed to be forced.
   }
   
   abstract protected function validated();
